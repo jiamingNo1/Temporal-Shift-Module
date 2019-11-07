@@ -1,6 +1,6 @@
 ## Temporal Shift Module for Jester Gesture Recognition 
 
-According to [mit official code](https://github.com/mit-han-lab/temporal-shift-module).
+According to [mit official code](https://github.com/mit-han-lab/temporal-shift-module), we reduce and modify some codes for jester dataset.
 
 ### Prerequisites
 
@@ -11,13 +11,9 @@ According to [mit official code](https://github.com/mit-han-lab/temporal-shift-m
 
 ### Data Preparation
 
-Firstly, we need to download the [Jester](https://20bn.com/datasets/jester/v1) dataset.
-
-Then, process the data
+Firstly, we need to download the [Jester](https://20bn.com/datasets/jester/v1) dataset. Then, process the data. Finally, we get train, validate and test dataset seperately.
 
 `python datas/generate_label.py`
-
-Finally, we get train, validate and test dataset seperately.
 
 ### Train and Validate
 

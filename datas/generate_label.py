@@ -1,7 +1,7 @@
 import os
 
 if __name__ == '__main__':
-    dataset = 'jester/jester-v1'
+    dataset = 'datas/jester/jester-v1'
     with open('%s-labels.csv' % dataset) as f:
         lines = f.readlines()
     categories = []
@@ -9,7 +9,7 @@ if __name__ == '__main__':
         line = line.rstrip()
         categories.append(line)
     categories = sorted(categories)
-    with open('jester/category.txt', 'w') as f:
+    with open('datas/jester/category.txt', 'w') as f:
         f.write('\n'.join(categories))
 
     dict_categories = {}
@@ -18,7 +18,7 @@ if __name__ == '__main__':
 
     # train and validate dataset
     files_input = ['%s-validation.csv' % dataset, '%s-train.csv' % dataset]
-    files_output = ['jester/val_videofolder.txt', 'jester/train_videofolder.txt']
+    files_output = ['datas/jester/val_videofolder.txt', 'datas/jester/train_videofolder.txt']
     for (filename_input, filename_output) in zip(files_input, files_output):
         with open(filename_input) as f:
             lines = f.readlines()
@@ -40,7 +40,7 @@ if __name__ == '__main__':
             f.write('\n'.join(output))
 
     # test dataset
-    with open('jester/jester-v1-test.csv') as f:
+    with open('datas/jester/jester-v1-test.csv') as f:
         lines = f.readlines()
     folders = []
     for line in lines:
@@ -51,5 +51,5 @@ if __name__ == '__main__':
         dir_files = os.listdir(os.path.join('/home/hjm/Data/20bn-jester-v1/', curFolder))
         output.append('%s %d' % ('/home/hjm/Data/20bn-jester-v1/' + curFolder, len(dir_files)))
         print('%d/%d' % (i, len(folders)))
-    with open('jester/test_videofolder.txt', 'w') as f:
+    with open('datas/jester/test_videofolder.txt', 'w') as f:
         f.write('\n'.join(output))

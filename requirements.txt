@@ -1,0 +1,7 @@
+future==0.17.1
+numpy==1.17.0
+pillow==5.1.0
+opencv-python==3.4.5.20
+torch==1.2.0
+torchvision==0.4.0
+tensorboard==1.14.0

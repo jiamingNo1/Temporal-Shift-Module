@@ -1,4 +1,3 @@
-export CUDA_VISIBLE_DEVICES=0
 python main.py \
      --mode train \
      --arch mobilenetv2 \

@@ -49,7 +49,10 @@ def main():
     optimizer = torch.optim.SGD(policies, args.lr, momentum=args.momentum, weight_decay=args.weight_decay)
 
     # cuda and cudnn
-    model = model.cuda()
+    try:
+        model=nn.DataParallel(model).cuda()
+    except:
+        model = model.cuda()
     cudnn.benchmark = True
 
     # data loader

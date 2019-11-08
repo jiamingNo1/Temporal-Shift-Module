@@ -172,13 +172,13 @@ def train(train_loader, model, criterion, optimizer, epoch, log, tf_writer):
         # time
         batch_time.update(time.time() - end)
         end = time.time()
-        if idx % args.print_freq == 0:
+        if (idx+1) % args.print_freq == 0:
             output = ('Train: epoch-{0} ({1}/{2})\t'
                       'batch_time {batch_time.avg:.2f}\t\t'
                       'data_time {data_time.avg:.2f}\t\t'
                       'loss {loss.avg:.3f}\t'
                       'prec@1 {top1.avg:.2f}\t'.format(
-                epoch, idx, len(train_loader), batch_time=batch_time,
+                epoch, idx+1, len(train_loader), batch_time=batch_time,
                 data_time=data_time, loss=losses, top1=top1))
             batch_time.reset()
             data_time.reset()
@@ -230,7 +230,7 @@ def test(test_loader, model, checkpoint):
             output = model(input)
 
             # accuracy
-            pred = output.argmax(dim=1).numpy().tolist()
+            pred = output.argmax(dim=1).cpu().numpy().tolist()
             result.extend(pred)
 
     with open('datas/jester/jester-v1-test.csv') as f:
@@ -238,7 +238,7 @@ def test(test_loader, model, checkpoint):
     assert len(lines)==len(result)
     with open(os.path.join(args.root_log, args.store_name, 'result.csv'), 'w') as f:
         for idx in range(len(result)):
-            f.write(lines[idx].strip()+';'+result[idx]+'\n')
+            f.write(lines[idx].strip()+';'+str(result[idx])+'\n')
 
 
 if __name__ == '__main__':

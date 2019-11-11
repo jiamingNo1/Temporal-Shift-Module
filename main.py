@@ -122,8 +122,6 @@ def main():
                 # remember best precision and save checkpoint
                 is_best = prec1 >= best_prec1
                 best_prec1 = max(prec1, best_prec1)
-                tf_writer.add_scalar('acc/test_top1_best', best_prec1, epoch)
-
                 output_best = 'Best Prec@1: %.2f\n' % (best_prec1)
                 print(output_best)
                 log_training.write(output_best + '\n')

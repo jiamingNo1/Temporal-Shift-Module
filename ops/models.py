@@ -24,7 +24,8 @@ class TSN(nn.Module):
                     num_segments:       {}
                     dropout_ratio:      {}
                     img_feature_dim:    {}
-                """.format(base_model, self.num_segments, self.dropout, self.img_feature_dim)))
+                    shift_div:          {}
+                """.format(base_model, self.num_segments, self.dropout, self.img_feature_dim, self.shift_div)))
 
         self._prepare_base_model(base_model)
         self._prepare_tsn(num_class)

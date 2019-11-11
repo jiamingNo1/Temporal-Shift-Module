@@ -200,7 +200,7 @@ def train(train_loader, model, criterion, optimizer, epoch, log, tf_writer):
     tf_writer.add_scalar('lr', optimizer.param_groups[-1]['lr'], epoch)
 
 
-def validate(val_loader, model, criterion, epoch, log=None, tf_writer=None):
+def validate(val_loader, model, criterion, epoch, log, tf_writer):
     losses = AverageMeter()
     top1 = AverageMeter()
     model.eval()
@@ -217,12 +217,10 @@ def validate(val_loader, model, criterion, epoch, log=None, tf_writer=None):
 
     output = ('Validate: Prec@1 {top1.avg:.2f}  Loss {loss.avg:.3f}'.format(top1=top1, loss=losses))
     print(output)
-    if log is not None:
-        log.write(output + '\n')
-        log.flush()
-    if tf_writer is not None:
-        tf_writer.add_scalar('loss/val', losses.avg, epoch)
-        tf_writer.add_scalar('acc/val_top1', top1.avg, epoch)
+    log.write(output + '\n')
+    log.flush()
+    tf_writer.add_scalar('loss/val', losses.avg, epoch)
+    tf_writer.add_scalar('acc/val_top1', top1.avg, epoch)
 
     return top1.avg
 

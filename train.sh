@@ -1,4 +1,4 @@
-python main.py \
+python3 main.py \
      --mode train \
      --arch mobilenetv2 \
      --num_segments 8 \

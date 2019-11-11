@@ -149,9 +149,15 @@ def train(train_loader, model, criterion, optimizer, epoch, log, tf_writer):
     losses = AverageMeter()
     top1 = AverageMeter()
     if args.no_partialbn:
-        model.partialBN(False)
+        try:
+            model.module.partialBN(False)
+        except:
+            model.partialBN(False)
     else:
-        model.partialBN(True)
+        try:
+            model.module.partialBN(True)
+        except:
+            model.partialBN(True)
     model.train()
 
     end = time.time()
@@ -168,7 +174,7 @@ def train(train_loader, model, criterion, optimizer, epoch, log, tf_writer):
 
         # gradient and optimizer
         loss.backward()
-        if (idx + 1) % 8 == 0:
+        if (idx + 1) % args.update_weight == 0:
             optimizer.step()
             optimizer.zero_grad()
 

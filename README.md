@@ -13,7 +13,7 @@ According to [mit official code](https://github.com/mit-han-lab/temporal-shift-m
 
 Firstly, we need to download the [Jester](https://20bn.com/datasets/jester/v1) dataset. Then, we process the data and generate corresponding labels. Finally, we get category.txt, train_videofolder.txt, val_videofolder.txt and test_videofolder.txt documents.
 
-`python datas/generate_label.py`
+`python3 datas/generate_label.py`
 
 ### Train and Validate
 

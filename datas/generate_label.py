@@ -33,8 +33,8 @@ if __name__ == '__main__':
         for i in range(len(folders)):
             curFolder = folders[i]
             curIDX = idx_categories[i]
-            dir_files = os.listdir(os.path.join('/home/hjm/Data/20bn-jester-v1/', curFolder))
-            output.append('%s %d %d' % ('/home/hjm/Data/20bn-jester-v1/' + curFolder, len(dir_files), curIDX))
+            dir_files = os.listdir(os.path.join('/workspace/datas/jester/20bn-jester-v1/', curFolder))
+            output.append('%s %d %d' % ('/workspace/datas/jester/20bn-jester-v1/' + curFolder, len(dir_files), curIDX))
             print('%d/%d' % (i, len(folders)))
         with open(filename_output, 'w') as f:
             f.write('\n'.join(output))
@@ -48,8 +48,8 @@ if __name__ == '__main__':
     output = []
     for i in range(len(folders)):
         curFolder = folders[i]
-        dir_files = os.listdir(os.path.join('/home/hjm/Data/20bn-jester-v1/', curFolder))
-        output.append('%s %d' % ('/home/hjm/Data/20bn-jester-v1/' + curFolder, len(dir_files)))
+        dir_files = os.listdir(os.path.join('/workspace/datas/jester/20bn-jester-v1/', curFolder))
+        output.append('%s %d' % ('/workspace/datas/jester/20bn-jester-v1/' + curFolder, len(dir_files)))
         print('%d/%d' % (i, len(folders)))
     with open('datas/jester/test_videofolder.txt', 'w') as f:
         f.write('\n'.join(output))

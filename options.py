@@ -15,7 +15,8 @@ parser.add_argument('--img_feature_dim', default=256, type=int, help="the featur
 
 # ========================= Learning Configs ==========================
 parser.add_argument('--epochs', default=50, type=int, help='number of total epochs')
-parser.add_argument('--batch_size', default=64, type=int)
+parser.add_argument('--batch_size', default=32, type=int, help='number of images per iteration')
+parser.add_argument('--update_weight', default=2, type=int, help='the actual batch size for updating weights')
 parser.add_argument('--lr', default=0.01, type=float)
 parser.add_argument('--lr_type', default='step', type=str)
 parser.add_argument('--lr_steps', default=[20, 40], type=float, nargs="+")

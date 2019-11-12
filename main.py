@@ -228,22 +228,25 @@ def validate(val_loader, model, criterion, epoch, log, tf_writer):
 def test(test_loader, model, checkpoint):
     model.load_state_dict(torch.load(checkpoint)['state_dict'])
     model.eval()
-    result = []
+    labels = []
     with torch.no_grad():
         for input in test_loader:
             input = input.cuda()
             output = model(input)
-
-            # accuracy
             pred = output.argmax(dim=1).cpu().numpy().tolist()
-            result.extend(pred)
+            labels.extend(pred)
 
     with open('datas/jester/jester-v1-test.csv') as f:
-        lines = f.readlines()
-    assert len(lines) == len(result)
+        videos = f.readlines()
+    with open('datas/jester/category.txt') as f:
+        categories=f.readlines()
+    assert len(videos) == len(labels)
+    assert len(categories) == len(labels)
+    result=[]
+    for idx in range(len(labels)):
+        result.append(videos[idx].strip() + ';' + categories[labels[idx]].rstrip())
     with open(os.path.join(args.root_log, args.store_name, 'result.csv'), 'w') as f:
-        for idx in range(len(result)):
-            f.write(lines[idx].strip() + ';' + str(result[idx]) + '\n')
+        f.write('\n'.join(result))
 
 
 if __name__ == '__main__':

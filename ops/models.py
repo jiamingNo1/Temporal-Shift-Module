@@ -112,7 +112,6 @@ class TSN(nn.Module):
                 normal_weight.append(ps[0])
                 if len(ps) == 2:
                     normal_bias.append(ps[1])
-
             elif isinstance(m, torch.nn.BatchNorm2d):
                 bn_cnt += 1
                 # later BN's are frozen

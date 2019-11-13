@@ -33,7 +33,6 @@ def main():
     model = TSN(n_class, args.num_segments,
                 base_model=args.arch,
                 dropout=args.dropout,
-                img_feature_dim=args.img_feature_dim,
                 partial_bn=not args.no_partialbn,
                 is_shift=args.shift, shift_div=args.shift_div)
 

@@ -6,26 +6,22 @@ from ops.transforms import *
 
 
 class TSN(nn.Module):
-    def __init__(self, num_class,
-                 num_segments, base_model='mobilenetv2',
-                 dropout=0.5, img_feature_dim=256,
-                 partial_bn=True, is_shift=False, shift_div=8):
+    def __init__(self, num_class, num_segments, base_model='mobilenetv2',
+                 dropout=0.5, partial_bn=True, is_shift=False, shift_div=8):
         super(TSN, self).__init__()
         self.num_segments = num_segments
         self.base_model_name = base_model
         self.dropout = dropout
-        self.img_feature_dim = img_feature_dim
         self.is_shift = is_shift
         self.shift_div = shift_div
 
         print(("""
-                Initializing TSN with base model: {}.
                 TSN Configurations:
+                    base model:         {}
                     num_segments:       {}
                     dropout_ratio:      {}
-                    img_feature_dim:    {}
                     shift_div:          {}
-                """.format(base_model, self.num_segments, self.dropout, self.img_feature_dim, self.shift_div)))
+                """.format(base_model, self.num_segments, self.dropout, self.shift_div)))
 
         self._prepare_base_model(base_model)
         self._prepare_tsn(num_class)

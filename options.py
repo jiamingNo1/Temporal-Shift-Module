@@ -11,7 +11,6 @@ parser.add_argument('--mode', type=str, default="train")
 parser.add_argument('--arch', type=str, default="mobilenetv2")
 parser.add_argument('--num_segments', type=int, default=8)
 parser.add_argument('--dropout', default=0.5, type=float)
-parser.add_argument('--img_feature_dim', default=256, type=int, help="the feature dimension for each frame")
 
 # ========================= Learning Configs ==========================
 parser.add_argument('--epochs', default=25, type=int, help='number of total epochs')

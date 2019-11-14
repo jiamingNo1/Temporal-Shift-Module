@@ -155,7 +155,7 @@ class MobileNetV2(nn.Module):
         x = x.mean(3).mean(2)
         x = self.classifier(x)
 
-        return x, out_buffer ### modified
+        return (x, *out_buffer) ### modified
 
     def _initialize_weights(self):
         for m in self.modules():
@@ -186,5 +186,5 @@ if __name__ == '__main__':
                     torch.zeros([1, 20, 7, 7]),
                     torch.zeros([1, 20, 7, 7])]
 
-    y, shift_buffer = model(x, *shift_buffer)
-    print([s.shape for s in shift_buffer])
+    output = model(x, *shift_buffer)
+    print([s.shape for s in output[1:]])

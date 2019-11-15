@@ -43,8 +43,6 @@ class GroupCenterCrop(object):
 
 
 class GroupRandomHorizontalFlip(object):
-    """Randomly horizontally flips the given PIL.Image with a probability of 0.5
-    """
     def __init__(self, is_flow=False):
         self.is_flow = is_flow
 
@@ -77,14 +75,6 @@ class GroupNormalize(object):
 
 
 class GroupScale(object):
-    """ Rescales the input PIL.Image to the given 'size'.
-    'size' will be the size of the smaller edge.
-    For example, if height > width, then image will be
-    rescaled to (size * height / width, size)
-    size: size of the smaller edge
-    interpolation: Default: PIL.Image.BILINEAR
-    """
-
     def __init__(self, size, interpolation=Image.BILINEAR):
         self.worker = torchvision.transforms.Resize(size, interpolation)
 
@@ -247,12 +237,6 @@ class GroupMultiScaleCrop(object):
 
 
 class GroupRandomSizedCrop(object):
-    """Random crop the given PIL.Image to a random size of (0.08 to 1.0) of the original size
-    and and a random aspect ratio of 3/4 to 4/3 of the original aspect ratio
-    This is popularly used to train the Inception networks
-    size: size of the smaller edge
-    interpolation: Default: PIL.Image.BILINEAR
-    """
     def __init__(self, size, interpolation=Image.BILINEAR):
         self.size = size
         self.interpolation = interpolation
@@ -305,8 +289,6 @@ class Stack(object):
 
 
 class ToTorchFormatTensor(object):
-    """ Converts a PIL.Image (RGB) or numpy.ndarray (H x W x C) in the range [0, 255]
-    to a torch.FloatTensor of shape (C x H x W) in the range [0.0, 1.0] """
     def __init__(self, div=True):
         self.div = div
 

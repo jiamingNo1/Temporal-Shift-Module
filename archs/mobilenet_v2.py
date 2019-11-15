@@ -143,4 +143,4 @@ if __name__ == '__main__':
     model.last_layer_name = 'classifier'
     feature_dim = getattr(model, model.last_layer_name).in_features
     setattr(model, model.last_layer_name, nn.Dropout(p=0.8))
-    print(model.state_dict())
+    print(model.state_dict().keys())

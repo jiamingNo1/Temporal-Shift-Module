@@ -11,10 +11,9 @@ import numpy as np
 import tvm.relay as relay
 from PIL import Image
 import tvm.contrib.graph_runtime as graph_runtime
-from mobilenet_v2_tsm import MobileNetV2
+from online_demo.mobilenet_v2_tsm import MobileNetV2
 
 HISTORY_LOGIT = True
-REFINE_OUTPUT = True
 
 
 def torch2tvm_module(model, inputs, target):
@@ -73,7 +72,18 @@ def torch2executor(model, inputs, target):
 def get_executor():
     model = MobileNetV2(n_class=27)
     mobilenetv2_jester = torch.load('mobilenetv2_jester.pth.tar')['state_dict']
-    model.load_state_dict(mobilenetv2_jester)
+    from collections import OrderedDict
+    new_state_dict = OrderedDict()
+    for k, v in mobilenetv2_jester.items():
+        name = k[7:]
+        if 'new_fc' in name:
+            name = name.replace('new_fc', 'classifier')
+        else:
+            if 'net' in name:
+                name = name.replace('net.', '')
+            name = name[11:]
+        new_state_dict[name] = v
+    model.load_state_dict(new_state_dict)
     inputs = (torch.rand(1, 3, 224, 224),
               torch.zeros([1, 3, 56, 56]),
               torch.zeros([1, 4, 28, 28]),
@@ -204,12 +214,7 @@ catigories = [
 
 
 def process_output(idx_, history):
-    # idx_: the output of current frame
-    # history: a list containing the history of predictions
-    if not REFINE_OUTPUT:
-        return idx_, history
-
-    max_hist_len = 20  # max history buffer
+    max_hist_len = 20
 
     # mask out illegal action
     if idx_ in [7, 8, 21, 22, 3]:
@@ -246,8 +251,6 @@ def main():
     cv2.moveWindow(WINDOW_NAME, 0, 0)
     cv2.setWindowTitle(WINDOW_NAME, WINDOW_NAME)
 
-    t = None
-    index = 0
     print("Build Transformer...")
     transform = get_transform()
     print("Build Executor...")
@@ -265,15 +268,17 @@ def main():
         tvm.nd.empty((1, 20, 7, 7), ctx=ctx)
     )
     idx = 0
+    index = 0
+    t = None
     history = [2]
     history_logit = []
-    i_frame = -1
+    idx_frame = -1
 
     print("Ready!")
     while True:
-        i_frame += 1
+        idx_frame += 1
         _, img = cap.read()  # 240*320*3
-        if i_frame % 2 == 0:  # skip every other frame to obtain a suitable frame rate
+        if idx_frame % 2 == 0:  # skip every other frame to obtain a suitable frame rate
             end = time.time()
             img_tran = transform([Image.fromarray(img).convert('RGB')])
             torch_input = img_tran.view(1, 3, img_tran.size(1), img_tran.size(2))
@@ -287,6 +292,7 @@ def main():
                 history_logit.append(feat.asnumpy())
                 history_logit = history_logit[-12:]
                 avg_logit = sum(history_logit)
+                print(avg_logit)
                 idx_ = np.argmax(avg_logit, axis=1)[0]
 
             idx, history = process_output(idx_, history)

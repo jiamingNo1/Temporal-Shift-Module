@@ -11,7 +11,7 @@ import numpy as np
 import tvm.relay as relay
 from PIL import Image
 import tvm.contrib.graph_runtime as graph_runtime
-from online_demo.mobilenet_v2_tsm import MobileNetV2
+from mobilenet_v2_tsm import MobileNetV2
 
 HISTORY_LOGIT = True
 
@@ -98,15 +98,6 @@ def get_executor():
     return torch2executor(model, inputs, target='cuda')
 
 
-def transform(frame):
-    # from H*W*C to 1*C*H*W
-    frame = cv2.resize(frame, (224, 224))
-    frame = frame / 255.0
-    frame = np.transpose(frame, axes=[2, 0, 1])
-    frame = np.expand_dims(frame, axis=0)
-    return frame
-
-
 class GroupScale(object):
     def __init__(self, size, interpolation=Image.BILINEAR):
         self.worker = torchvision.transforms.Resize(size, interpolation)
@@ -146,8 +137,7 @@ class ToTorchFormatTensor(object):
             # handle PIL Image
             img = torch.ByteTensor(torch.ByteStorage.from_buffer(pic.tobytes()))
             img = img.view(pic.size[1], pic.size[0], len(pic.mode))
-            # put it from HWC to CHW format
-            # yikes, this transpose takes 80% of the loading time/CPU
+            # from HWC to CHW format
             img = img.transpose(0, 1).transpose(0, 2).contiguous()
         return img.float().div(255) if self.div else img.float()
 
@@ -160,12 +150,18 @@ class GroupNormalize(object):
     def __call__(self, tensor):
         rep_mean = self.mean * (tensor.size()[0] // len(self.mean))
         rep_std = self.std * (tensor.size()[0] // len(self.std))
-
-        # TODO: make efficient
         for t, m, s in zip(tensor, rep_mean, rep_std):
             t.sub_(m).div_(s)
-
         return tensor
+
+
+def transform(frame):
+    # from H*W*C to 1*C*H*W
+    frame = cv2.resize(frame, (224, 224))
+    frame = frame / 255.0
+    frame = np.transpose(frame, axes=[2, 0, 1])
+    frame = np.expand_dims(frame, axis=0)
+    return frame
 
 
 def get_transform():
@@ -226,7 +222,7 @@ def process_output(idx_, history):
 
     # history smoothing
     if idx_ != history[-1]:
-        if not (history[-1] == history[-2]):  # and history[-2] == history[-3]):
+        if not (history[-1] == history[-2]):
             idx_ = history[-1]
 
     history.append(idx_)

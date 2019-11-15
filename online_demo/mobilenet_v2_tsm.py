@@ -155,7 +155,7 @@ class MobileNetV2(nn.Module):
         x = x.mean(3).mean(2)
         x = self.classifier(x)
 
-        return (x, *out_buffer) ### modified
+        return (x, *out_buffer)
 
     def _initialize_weights(self):
         for m in self.modules():

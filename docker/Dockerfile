@@ -22,5 +22,6 @@ RUN python3 -m pip install --upgrade pip && \
     pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple && \
     pip3 install setuptools
 
-RUN git clone https://github.com/jiamingNo1/Temporal-Shift-Module.git . && \
-    pip3 install -r requirements.txt
+RUN git clone https://github.com/jiamingNo1/Temporal-Shift-Module.git .
+
+RUN pip3 install -r requirements.txt

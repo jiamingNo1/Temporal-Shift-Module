@@ -264,8 +264,6 @@ def main():
         tvm.nd.empty((1, 20, 7, 7), ctx=ctx)
     )
     idx = 0
-    index = 0
-    t = None
     history = [2]
     history_logit = []
     idx_frame = -1
@@ -288,11 +286,10 @@ def main():
                 history_logit.append(feat.asnumpy())
                 history_logit = history_logit[-12:]
                 avg_logit = sum(history_logit)
-                print(avg_logit)
                 idx_ = np.argmax(avg_logit, axis=1)[0]
 
             idx, history = process_output(idx_, history)
-            print(f"{index} {catigories[idx]}")
+            print(f"{idx_frame} {catigories[idx]}")
             current_time = time.time() - end
 
         img = cv2.resize(img, (640, 480))
@@ -313,9 +310,9 @@ def main():
         cv2.imshow(WINDOW_NAME, img)
 
         key = cv2.waitKey(1)
-        if key & 0xFF == ord('q') or key == 27:  # exit
+        if key & 0xFF == ord('q') or key == 27:
             break
-        elif key == ord('F') or key == ord('f'):  # full screen
+        elif key == ord('F') or key == ord('f'):
             print('Changing full screen option!')
             full_screen = not full_screen
             if full_screen:
@@ -325,13 +322,6 @@ def main():
             else:
                 cv2.setWindowProperty(WINDOW_NAME, cv2.WND_PROP_FULLSCREEN,
                                       cv2.WINDOW_NORMAL)
-
-        if t is None:
-            t = time.time()
-        else:
-            nt = time.time()
-            index += 1
-            t = nt
 
     cap.release()
     cv2.destroyAllWindows()

@@ -173,18 +173,19 @@ class MobileNetV2(nn.Module):
 
 
 if __name__ == '__main__':
-    model = MobileNetV2()
-    x = torch.rand(1, 3, 224, 224)
-    shift_buffer = [torch.zeros([1, 3, 56, 56]),
-                    torch.zeros([1, 4, 28, 28]),
-                    torch.zeros([1, 4, 28, 28]),
-                    torch.zeros([1, 8, 14, 14]),
-                    torch.zeros([1, 8, 14, 14]),
-                    torch.zeros([1, 8, 14, 14]),
-                    torch.zeros([1, 12, 14, 14]),
-                    torch.zeros([1, 12, 14, 14]),
-                    torch.zeros([1, 20, 7, 7]),
-                    torch.zeros([1, 20, 7, 7])]
+    model = MobileNetV2(n_class=27)
+    mobilenetv2_jester = torch.load('mobilenetv2_jester.pth.tar')['state_dict']
+    from collections import OrderedDict
 
-    output = model(x, *shift_buffer)
-    print([s.shape for s in output[1:]])
+    new_state_dict = OrderedDict()
+    for k, v in mobilenetv2_jester.items():
+        name = k[7:]
+        if 'new_fc' in name:
+            name = name.replace('new_fc', 'classifier')
+        else:
+            if 'net' in name:
+                name = name.replace('net.', '')
+            name = name[11:]
+        new_state_dict[name] = v
+    model.load_state_dict(new_state_dict)
+    print(model.state_dict())

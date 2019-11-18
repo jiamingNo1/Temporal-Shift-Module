@@ -1,6 +1,7 @@
 ## Temporal Shift Module for Jester Gesture Recognition 
 
-According to [mit official code](https://github.com/mit-han-lab/temporal-shift-module), we reduce and modify some codes for jester dataset.
+According to [mit official code](https://github.com/mit-han-lab/temporal-shift-module), 
+we reduce and modify some codes for jester dataset.
 
 ### Prerequisites
 
@@ -11,7 +12,9 @@ According to [mit official code](https://github.com/mit-han-lab/temporal-shift-m
 
 ### Data Preparation
 
-Firstly, we need to download the [Jester](https://20bn.com/datasets/jester/v1) dataset. Then, we process the data and generate corresponding labels. Finally, we get category.txt, train_videofolder.txt, val_videofolder.txt and test_videofolder.txt documents.
+Firstly, we need to download the [Jester](https://20bn.com/datasets/jester/v1) dataset. 
+Then, we process the data and generate corresponding labels. 
+Finally, we get category.txt, train_videofolder.txt, val_videofolder.txt and test_videofolder.txt documents.
 
 `python3 datas/generate_label.py`
 
@@ -19,7 +22,8 @@ Firstly, we need to download the [Jester](https://20bn.com/datasets/jester/v1) d
 
 `bash train.sh`
 
-After total training epochs, you can get result.csv, that is the test result document, including video number and corresponding label.
+After total training epochs, you can get result.csv, 
+that is the test result document, including video number and corresponding label.
 
 ### Reference
 

@@ -238,10 +238,9 @@ def test(test_loader, model, checkpoint):
     with open('datas/jester/jester-v1-test.csv') as f:
         videos = f.readlines()
     with open('datas/jester/category.txt') as f:
-        categories=f.readlines()
+        categories = f.readlines()
     assert len(videos) == len(labels)
-    assert len(categories) == len(labels)
-    result=[]
+    result = []
     for idx in range(len(labels)):
         result.append(videos[idx].strip() + ';' + categories[labels[idx]].rstrip())
     with open(os.path.join(args.root_log, args.store_name, 'result.csv'), 'w') as f:

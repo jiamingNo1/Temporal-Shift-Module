@@ -25,7 +25,7 @@ class GroupRandomCrop(object):
         y1 = random.randint(0, h - th)
 
         for img in img_group:
-            assert(img.size[0] == w and img.size[1] == h)
+            assert (img.size[0] == w and img.size[1] == h)
             if w == tw and h == th:
                 out_images.append(img)
             else:
@@ -64,10 +64,8 @@ class GroupNormalize(object):
         self.std = std
 
     def __call__(self, tensor):
-        rep_mean = self.mean * (tensor.size()[0]//len(self.mean))
-        rep_std = self.std * (tensor.size()[0]//len(self.std))
-
-        # TODO: make efficient
+        rep_mean = self.mean * (tensor.size()[0] // len(self.mean))
+        rep_std = self.std * (tensor.size()[0] // len(self.std))
         for t, m, s in zip(tensor, rep_mean, rep_std):
             t.sub_(m).div_(s)
 
@@ -267,7 +265,7 @@ class GroupRandomSizedCrop(object):
             out_group = list()
             for img in img_group:
                 img = img.crop((x1, y1, x1 + w, y1 + h))
-                assert(img.size == (w, h))
+                assert (img.size == (w, h))
                 out_group.append(img.resize((self.size, self.size), self.interpolation))
             return out_group
         else:
@@ -316,21 +314,3 @@ if __name__ == "__main__":
             std=[.229, .224, .225]
         )]
     )
-
-    im = Image.open('../lena_299.png')
-
-    color_group = [im] * 3
-    rst = trans(color_group)
-
-    gray_group = [im.convert('L')] * 9
-    gray_rst = trans(gray_group)
-
-    trans2 = torchvision.transforms.Compose([
-        GroupRandomSizedCrop(256),
-        Stack(),
-        ToTorchFormatTensor(),
-        GroupNormalize(
-            mean=[.485, .456, .406],
-            std=[.229, .224, .225])
-    ])
-    print(trans2(color_group))

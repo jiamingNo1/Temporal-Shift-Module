@@ -108,7 +108,7 @@ def main():
 
     # train
     if args.mode == 'train':
-        log_training = open(os.path.join(args.root_log, args.store_name, 'log.csv'), 'w')
+        log_training = open(os.path.join(args.root_log, args.store_name, time_stamp, 'log.csv'), 'w')
         tf_writer = SummaryWriter('{}/{}/'.format(args.root_log, args.store_name) + time_stamp)
         for epoch in range(args.start_epoch, args.epochs):
             adjust_learning_rate(optimizer, epoch, args.lr_steps, args.lr, args.weight_decay)
@@ -137,7 +137,7 @@ def main():
 
     # test
     checkpoint = '%s/%s/ckpt.best.pth.tar' % (args.root_model, args.store_name)
-    test(test_loader, model, checkpoint)
+    test(test_loader, model, checkpoint, time_stamp)
 
 
 def train(train_loader, model, criterion, optimizer, epoch, log, tf_writer):
@@ -224,7 +224,7 @@ def validate(val_loader, model, criterion, epoch, log, tf_writer):
     return top1.avg
 
 
-def test(test_loader, model, checkpoint):
+def test(test_loader, model, checkpoint, time_stamp):
     model.load_state_dict(torch.load(checkpoint)['state_dict'])
     model.eval()
     labels = []
@@ -243,7 +243,7 @@ def test(test_loader, model, checkpoint):
     result = []
     for idx in range(len(labels)):
         result.append(videos[idx].strip() + ';' + categories[labels[idx]].rstrip())
-    with open(os.path.join(args.root_log, args.store_name, 'result.csv'), 'w') as f:
+    with open(os.path.join(args.root_log, args.store_name, time_stamp, 'result.csv'), 'w') as f:
         f.write('\n'.join(result))
 
 
